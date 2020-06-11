@@ -13,6 +13,18 @@ def month_name_to_numb(monthname):
     month_table_reversed = {'Janurary':'01', 'February':'02', 'March':'03', 'April':'04', 'May':'05', 'June':'06', 'July':'07', 'August':'08', 'September':'09', 'October':'10', 'November':'11', 'December':'12'}
     return month_table_reversed[monthname]
 
+def to_usd(my_price):
+    """
+    Converts a numeric value to usd-formatted string, for printing and display purposes.
+
+    Param: my_price (int or float) like 4000.444444
+
+    Example: to_usd(4000.444444)
+
+    Returns: $4,000.44
+    """
+    return f"${my_price:,.2f}" #> $12,000.71
+
 #when the user runs the program, they should select one of the CSV files
 
 #use the os module to detect the names of all CSV files which exist in the "data" directory, then display this list to the user and prompt the user to input their selection
@@ -72,7 +84,7 @@ while True:
         csv_read = pd.read_csv(csv_name)
         break
 
-print(csv_read)
+daily_sales = csv_read
 
 #if file selection fails, produce an error message that says "Hello, unfortunately I couldn't find that file. Please check to make sure the file and filepath is correct and resubmit."
 
@@ -82,28 +94,27 @@ print("Crunching the data...")
 #Output Requirements:
 #Total Monthly Sales: sum of total monthly sales for each product, formatted as USD(from function) to two decimal places
 
+total_sales = to_usd(daily_sales["sales price"].sum())
+
 print("-----------------------")
-print("TOTAL MONTHLY SALES: $12,000.71")
+print(f"TOTAL MONTHLY SALES: {total_sales}")
+
+sales_by_prod = daily_sales.groupby(["product"]).sum()
+top_3 = sales_by_prod.nlargest(3, 'sales price')
+top_3_dict = top_3.to_dict()
+top_3_list = [f"{prod}: {to_usd(sales)} " for prod, sales in top_3_dict['sales price'].items()]
+
+#List of Top Selling Products: top sellers list with sum of total monthly sales formatted with USD function and two decimal places
 
 print("-----------------------")
 print("TOP SELLING PRODUCTS:")
-print("  1) Button-Down Shirt: $6,960.35")
-print("  2) Super Soft Hoodie: $1,875.00")
-print("  3) etc.")
+print("                       ")
 
+for i, prd in enumerate(top_3_list, 1):
+    print(f"{i}) {prd}")
 print("-----------------------")
 print("VISUALIZING THE DATA...")
 
-#jordan_stats = pd.read_csv("jordan_stats.csv")
-#print(jordan_stats.head(3))
-# displays the first three rows of the dataset
-#print(jordan_stats.count())
-#counts the rows of the dataset
-
-#print(jordan_stats[stats["BLK"] > 4])
-
-
-#List of Top Selling Products: top sellers list with sum of total monthly sales formatted with USD function and two decimal places
 #2 Graphs depicting the information above - graphs should include details on month selected
 #Additional enhancements: Compare sales across months - total annual graph as the third graph?
 
