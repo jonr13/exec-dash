@@ -1,6 +1,8 @@
 # exec-dash
 The following is a README file for the instructions on how to use the executive dashboard generator
 
+Setup: The user should run "dashboard_generator.py" to run the program
+
 Steps:
 1. The user is first pomprted to input the year he/she would like to pull sales history for.
 He or she should type in a year like '2018' or '2017', for example
